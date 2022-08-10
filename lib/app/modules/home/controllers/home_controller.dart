@@ -6,11 +6,13 @@ import 'package:http/http.dart' as http;
 class HomeController extends GetxController {
   List<dynamic> nowPlaying = [];
   List<dynamic> popular = [];
+  List<dynamic> topRated = [];
 
   @override
   void onInit() {
     super.onInit();
     getNowPlaying();
+    getTopRated();
   }
 
   Future<List<dynamic>> getNowPlaying() async{
@@ -49,17 +51,23 @@ class HomeController extends GetxController {
     }
   }
 
-  // void getTopRated() async{
-  //   try{
-  //     var resp = await http.get(
-  //       Uri.parse('https://api.themoviedb.org/3/movie/most_rated?api_key=81728309a12b337c7334a06681733deb')
-  //     );
+  Future<List<dynamic>> getTopRated() async{
+    try{
+      var resp = await http.get(
+        Uri.parse('https://api.themoviedb.org/3/movie/upcoming?api_key=81728309a12b337c7334a06681733deb&language=en-US&page=1')
+      );
 
-  //     Map<String, dynamic> topRated = json.decode(resp.body);
-  //   }catch(e){
-  //     print(e);
-  //   }
-  // }
+     topRated = json.decode(resp.body)['results'] as List;
+     update();
+
+     return topRated;
+    }catch(e){
+      print(e);
+      return [
+        "message", "Cannot get data"
+      ];
+    }
+  }
 
   // void getUpcoming() async{
   //   try{

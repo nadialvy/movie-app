@@ -16,6 +16,7 @@ class HomeView extends GetView<HomeController> {
         body: SingleChildScrollView(
           child: VStack(
             [
+              // === NOW PLAYING SECTION ====
               VxBox(
                 child: Column(
                   children: [
@@ -23,8 +24,8 @@ class HomeView extends GetView<HomeController> {
                       padding: const EdgeInsets.fromLTRB(20, 20, 20, 5),
                       child: Row(
                         children: [
-                          Text('Now Playing').text.white.size(Dimensions.font18).make(),
-                          Text('SEE ALL').text.color(tosca).size(Dimensions.font12).make(),
+                          const Text('Now Playing').text.white.size(Dimensions.font18).make(),
+                          const Text('SEE ALL').text.color(tosca).size(Dimensions.font12).make(),
                         ],
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       ),
@@ -90,6 +91,7 @@ class HomeView extends GetView<HomeController> {
                 )
               ).make(),
 
+              // === POPULAR SECTION ====
               VxBox(
                 child: Column(
                   children: [
@@ -192,7 +194,110 @@ class HomeView extends GetView<HomeController> {
                   ],
                 ),
               ).make(),
-              VxBox().make(),
+
+              // === TOP RATED SECTION ====
+              VxBox(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+                      child: Row(
+                        children: [
+                          const Text('Top Rated').text.white.size(Dimensions.font18).make(),
+                          const Text('SEE ALL').text.color(tosca).size(Dimensions.font12).make(),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                    ),
+                    VxBox(
+                      child: FutureBuilder(
+                        future: controller.getTopRated(),
+                        builder: ((context, AsyncSnapshot snapshot){
+                          if(snapshot.connectionState == ConnectionState.waiting){
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+
+                          var topRated = snapshot.data!;
+                          String dateStr = topRated[0]['release_date'];
+                          print(DateTime.parse(dateStr));
+                          
+
+                          return ListView.builder(
+                            physics: const ClampingScrollPhysics(),
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: topRated.length - 15,
+                            itemBuilder: (context, index){
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                child: VxContinuousRectangle(
+                                  backgroundColor: secondaryBlue,
+                                  radius: Dimensions.radius10,
+                                  width: 115,
+                                  child: VStack(
+                                    [
+                                      Container(
+                                        height: 150,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(Dimensions.radius5),
+                                            topLeft: Radius.circular(Dimensions.radius5),
+                                          ),
+                                          image: DecorationImage(
+                                            image: NetworkImage('http://image.tmdb.org/t/p/w500${topRated[index]["poster_path"]}'),
+                                            fit: BoxFit.cover
+                                          )
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        child: VStack(
+                                          [
+                                            SizedBox(height: 10,),
+                                            Text(
+                                              '${topRated[index]["title"]}',
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: Dimensions.font14,
+                                                color: Colors.white
+                                              ),
+                                            ),
+                                            SizedBox(height: 10,),
+                                            VStack(
+                                              [
+                                                Text('${DateFormat.y().format(DateTime.parse(topRated[index]["release_date"]))} Action').text.size(Dimensions.font8).white.make(),
+                                                HStack(
+                                                  [
+                                                    Icon(
+                                                      Icons.star,
+                                                      color: Colors.yellow,
+                                                      size: Dimensions.font12,
+                                                    ),
+                                                    ' ${topRated[index]["vote_average"]} '.text.size(Dimensions.font8).white.make(),
+                                                    '(${topRated[index]["vote_count"]})'.text.size(Dimensions.font8).white.make(),
+                                                  ]
+                                                )
+                                              ]
+                                            )
+                                          ],
+                                          alignment: MainAxisAlignment.spaceBetween,
+                                          crossAlignment: CrossAxisAlignment.start,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              );
+                            }
+                          );
+                        })
+                      ),
+                    ).height(225).make(),
+                  ],
+                )
+              ).make(),
             ]
           ),
         )
