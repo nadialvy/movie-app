@@ -7,12 +7,14 @@ class HomeController extends GetxController {
   List<dynamic> nowPlaying = [];
   List<dynamic> popular = [];
   List<dynamic> topRated = [];
+  List<dynamic> upComing = [];
 
   @override
   void onInit() {
     super.onInit();
     getNowPlaying();
     getTopRated();
+    getUpcoming();
   }
 
   Future<List<dynamic>> getNowPlaying() async{
@@ -46,7 +48,9 @@ class HomeController extends GetxController {
     }catch(e){
       print(e);
       return [
-        "message", "Cannot get data"
+        {
+          "message": "Cannot get data"
+        }
       ];
     }
   }
@@ -54,7 +58,7 @@ class HomeController extends GetxController {
   Future<List<dynamic>> getTopRated() async{
     try{
       var resp = await http.get(
-        Uri.parse('https://api.themoviedb.org/3/movie/upcoming?api_key=81728309a12b337c7334a06681733deb&language=en-US&page=1')
+        Uri.parse('https://api.themoviedb.org/3/movie/top_rated?api_key=81728309a12b337c7334a06681733deb')
       );
 
      topRated = json.decode(resp.body)['results'] as List;
@@ -64,21 +68,31 @@ class HomeController extends GetxController {
     }catch(e){
       print(e);
       return [
-        "message", "Cannot get data"
+        {
+          "message": "Cannot get data"
+        }
       ];
     }
   }
 
-  // void getUpcoming() async{
-  //   try{
-  //     var resp = await http.get(
-  //       Uri.parse('https://api.themoviedb.org/3/movie/upcoming?api_key=81728309a12b337c7334a06681733deb')
-  //     );
+  Future<List<dynamic>> getUpcoming() async{
+    try{
+      var resp = await http.get(
+        Uri.parse('https://api.themoviedb.org/3/movie/upcoming?api_key=81728309a12b337c7334a06681733deb')
+      );
 
-  //     Map<String, dynamic> upcoming = json.decode(resp.body);
-  //   }catch(e){
-  //     print(e);
-  //   }
-  // }
+      upComing = json.decode(resp.body)['results'] as List;
+      update();
+
+      return upComing;
+    }catch(e){
+      print(e);
+      return [
+        {
+          "message": "Cannot get data"
+        }
+      ];
+    }
+  }
 
 }
