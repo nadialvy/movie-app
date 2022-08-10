@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:movie_app/app/entities/now_playing_model.dart';
 
 class HomeController extends GetxController {
   List<dynamic> nowPlaying = [];
+  List<dynamic> popular = [];
+
   @override
   void onInit() {
     super.onInit();
@@ -30,17 +31,23 @@ class HomeController extends GetxController {
     }
   }
 
-  // void getPopular() async{
-  //   try{
-  //     var resp = await http.get(
-  //       Uri.parse('https://api.themoviedb.org/3/movie/popular?api_key=81728309a12b337c7334a06681733deb')
-  //     );
+  Future<List<dynamic>> getPopular() async{
+    try{
+      var resp = await http.get(
+        Uri.parse('https://api.themoviedb.org/3/movie/popular?api_key=81728309a12b337c7334a06681733deb')
+      );
 
-  //     Map<String, dynamic> popular = json.decode(resp.body);
-  //   }catch(e){
-  //     print(e);
-  //   }
-  // }
+      popular = json.decode(resp.body)['results'] as List;
+      update();
+
+      return popular;
+    }catch(e){
+      print(e);
+      return [
+        "message", "Cannot get data"
+      ];
+    }
+  }
 
   // void getTopRated() async{
   //   try{
