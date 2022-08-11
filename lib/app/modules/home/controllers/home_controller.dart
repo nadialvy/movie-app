@@ -14,6 +14,7 @@ class HomeController extends GetxController with StateMixin {
   final listTopRated = <Results>[].obs;
   final listUpcoming = <Results>[].obs;
 
+
   @override
   void onInit() {
     super.onInit();
@@ -49,8 +50,8 @@ class HomeController extends GetxController with StateMixin {
     }, onError: (err){
       change(null, status: RxStatus.error(err.toString()));
     });
-  }
 
+  }
   void fetchUpcoming(){
     homeProvider.getUpcoming().then((result){
       listUpcoming.value = ListMovieModel.fromJson(result.body).results!;
@@ -59,6 +60,8 @@ class HomeController extends GetxController with StateMixin {
       change(null, status: RxStatus.error(err.toString()));
     });
   }
+
+  
 
   
 

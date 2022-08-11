@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movie_app/app/constant/colors.dart';
 import 'package:movie_app/app/constant/dimension.dart';
+import 'package:movie_app/app/models/list_movie_model.dart';
 import 'package:movie_app/app/routes/app_pages.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -12,7 +13,7 @@ class SeeAllView extends GetView<SeeAllController> {
   List<dynamic> dataArguments = Get.arguments;
 
   late Map<String, dynamic> title = dataArguments[0];
-  late List<dynamic> listMovie = dataArguments[1];
+  late RxList<Results> listMovie = dataArguments[1];
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,7 @@ class SeeAllView extends GetView<SeeAllController> {
                           width: 75,
                           height: 125,
                           backgroundImage: DecorationImage(
-                            image: NetworkImage('http://image.tmdb.org/t/p/w500${listMovie[index]["poster_path"]}'),
+                            image: NetworkImage('http://image.tmdb.org/t/p/w500${listMovie[index].posterPath}'),
                             fit: BoxFit.cover
                           ),
                         ),
@@ -55,10 +56,10 @@ class SeeAllView extends GetView<SeeAllController> {
                           child: VStack(
                               [
                                 Text(
-                                '${listMovie[index]["title"]}',
+                                '${listMovie[index].title}',
                                 ).text.overflow(TextOverflow.visible).semiBold.white.size(Dimensions.font18).make(),
                               SizedBox(height: Dimensions.height5,),
-                              Text('${listMovie[index]["release_date"]}').text.size(Dimensions.font12).color(tosca).make(),
+                              Text('${listMovie[index].releaseDate}').text.size(Dimensions.font12).color(tosca).make(),
                               SizedBox(height: Dimensions.height5,),
                               Text('Action, Adventure, Fantasy').text.light.size(Dimensions.font12).white.make(),
                               HStack(
@@ -69,7 +70,7 @@ class SeeAllView extends GetView<SeeAllController> {
                                     selectionColor: Colors.yellow,
                                     size: Dimensions.font12,
                                   ),
-                                  Text(' ${listMovie[index]["vote_average"]} (${listMovie[index]["vote_count"]})').text.light.size(Dimensions.font12).white.make()
+                                  Text(' ${listMovie[index].voteAverage} (${listMovie[index].voteCount})').text.light.size(Dimensions.font12).white.make()
                                 ]
                               )
                             ],
