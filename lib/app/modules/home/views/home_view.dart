@@ -17,418 +17,399 @@ class HomeView extends GetView<HomeController> {
         body: SingleChildScrollView(
           child: VStack(
             [
-              // === NOW PLAYING SECTION ====
-              FutureBuilder(
-                future: controller.getNowPlaying(),
-                builder: ((context, AsyncSnapshot snapshot){
-                  if(snapshot.connectionState == ConnectionState.waiting){
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-
-                  var nowPlaying = snapshot.data!;
-
-                  return VStack(
-                    [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 5),
-                        child: Row(
-                          children: [
-                            const Text('Now Playing').text.semiBold.white.size(Dimensions.font18).make(),
-                            InkWell(
-                              onTap: (){
-                                Get.toNamed(
-                                  Routes.SEE_ALL,
-                                  arguments: [
-                                    {"title" : "Now Playing"},
-                                    nowPlaying,
-                                  ]
-                                );
-                              },
-                              child: const Text('SEE ALL').text.color(tosca).size(Dimensions.font12).make()
-                            ),
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        ),
-                      ),
-                      VxSwiper.builder(
-                        itemCount: nowPlaying.length - 15,
-                        itemBuilder: (context, index){
-                          return InkWell(
+              controller.obx(
+                (data) => VStack(
+                  [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 5),
+                      child: Row(
+                        children: [
+                          const Text('Now Playing').text.semiBold.white.size(Dimensions.font18).make(),
+                          InkWell(
                             onTap: (){
                               Get.toNamed(
-                                Routes.DETAIL_PAGE,
-                                arguments: nowPlaying[index]
+                                Routes.SEE_ALL,
+                                arguments: [
+                                  {"title" : "Now Playing"},
+                                  controller.listNowPlaying,
+                                ]
                               );
                             },
-                            child: VxContinuousRectangle(
-                              backgroundColor: Colors.black,
-                              radius: 10,
-                              backgroundImage: DecorationImage(
-                                colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
-                                image: NetworkImage('http://image.tmdb.org/t/p/w500${nowPlaying[index]["poster_path"]}'),
-                                fit: BoxFit.cover,
-                              ), 
-                              child: VStack(
-                                [
-                                  VxContinuousRectangle(
-                                    width: 250,
-                                    height: 125,
-                                    radius: 20,
-                                    backgroundImage: DecorationImage(
-                                      image: NetworkImage('http://image.tmdb.org/t/p/w500${nowPlaying[index]["poster_path"]}'),
-                                      fit: BoxFit.cover
-                                    ),  
-                                  ),
-                                  '${nowPlaying[index]["original_title"]}'.text.white.bold.size(Dimensions.font18).make(),
-                                  HStack(
-                                    [
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.yellow,
-                                        size: Dimensions.font12,
-                                      ),
-                                      ' ${nowPlaying[index]["vote_average"]} '.text.size(Dimensions.font14).white.make(),
-                                      '(${nowPlaying[index]["vote_count"]})'.text.size(Dimensions.font14).white.make(),
-                                    ]
-                                  )
-                                ],
-                                crossAlignment: CrossAxisAlignment.center,
-                                alignment: MainAxisAlignment.spaceAround,
-                              ),
-                            ).p4(),
-                          );
-                        }
-                      )
-                    ]
-                  );
-                })
+                            child: const Text('SEE ALL').text.color(tosca).size(Dimensions.font12).make()
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                    ),
+                    VxSwiper.builder(
+                      itemCount: controller.listNowPlaying.length - 15,
+                      itemBuilder: (context, index){
+                        return InkWell(
+                          onTap: (){
+                            Get.toNamed(
+                              Routes.DETAIL_PAGE,
+                              arguments: controller.listNowPlaying[index]
+                            );
+                          },
+                          child: VxContinuousRectangle(
+                            backgroundColor: Colors.black,
+                            radius: 10,
+                            backgroundImage: DecorationImage(
+                              colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                              image: NetworkImage('http://image.tmdb.org/t/p/w500${controller.listNowPlaying[index].posterPath}'),
+                              fit: BoxFit.cover,
+                            ), 
+                            child: VStack(
+                              [
+                                VxContinuousRectangle(
+                                  width: 250,
+                                  height: 125,
+                                  radius: 20,
+                                  backgroundImage: DecorationImage(
+                                    image: NetworkImage('http://image.tmdb.org/t/p/w500${controller.listNowPlaying[index].posterPath}'),
+                                    fit: BoxFit.cover
+                                  ),  
+                                ),
+                                '${controller.listNowPlaying[index].title}'.text.white.bold.size(Dimensions.font18).make(),
+                                HStack(
+                                  [
+                                    Icon(
+                                      Icons.star,
+                                      color: Colors.yellow,
+                                      size: Dimensions.font12,
+                                    ),
+                                    ' ${controller.listNowPlaying[index].voteAverage} '.text.size(Dimensions.font14).white.make(),
+                                    '(${controller.listNowPlaying[index].voteCount})'.text.size(Dimensions.font14).white.make(),
+                                  ]
+                                )
+                              ],
+                              crossAlignment: CrossAxisAlignment.center,
+                              alignment: MainAxisAlignment.spaceAround,
+                            ),
+                          ).p4(),
+                        );
+                      }
+                    )
+                  ]
+                ),
+                onEmpty: VxBox(
+                  child: Image.asset(
+                    'assets/images/nodata.jpg',
+                    fit: BoxFit.cover,
+                  )
+                ).color(Colors.white).width(Get.width).height(250).make(),
+                onLoading: const CircularProgressIndicator()
               ),
               
               // === POPULAR SECTION ====
-              FutureBuilder(
-                future: controller.getPopular(),
-                builder: ((context, AsyncSnapshot snapshot){
-                  if(snapshot.connectionState == ConnectionState.waiting){
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-      
-                  var popular = snapshot.data!; //List<dynamic>
-
-                  return VStack(
-                    [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
-                        child: Row(
-                          children: [
-                            const Text('Popular').text.white.semiBold.size(Dimensions.font18).make(),
-                            InkWell(
+              controller.obx(
+                (data) => VStack(
+                  [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+                      child: Row(
+                        children: [
+                          const Text('Popular').text.white.semiBold.size(Dimensions.font18).make(),
+                          InkWell(
+                            onTap: (){
+                              Get.toNamed(
+                                Routes.SEE_ALL,
+                                arguments: [
+                                  {"title" : "Popular"},
+                                  controller.listPopular,
+                                ]
+                              );
+                            },
+                            child: const Text('SEE ALL').text.color(tosca).size(Dimensions.font12).make()
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                    ),
+                    VxBox(
+                      child:
+                        ListView.builder(
+                          physics: const ClampingScrollPhysics(),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: controller.listPopular.length - 15,
+                          itemBuilder: (context, index){
+                            return InkWell(
                               onTap: (){
                                 Get.toNamed(
-                                  Routes.SEE_ALL,
-                                  arguments: [
-                                    {"title" : "Popular"},
-                                    popular,
-                                  ]
+                                  Routes.DETAIL_PAGE,
+                                  arguments: controller.listPopular[index]
                                 );
                               },
-                              child: const Text('SEE ALL').text.color(tosca).size(Dimensions.font12).make()
-                            ),
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        ),
-                      ),
-                      VxBox(
-                        child:
-                          ListView.builder(
-                            physics: const ClampingScrollPhysics(),
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: popular.length - 15,
-                            itemBuilder: (context, index){
-              
-                              return InkWell(
-                                onTap: (){
-                                  Get.toNamed(
-                                    Routes.DETAIL_PAGE,
-                                    arguments: popular[index]
-                                  );
-                                },
-                                child: VxContinuousRectangle(
-                                  backgroundColor: secondaryBlue,
-                                  radius: Dimensions.radius10,
-                                  width: 115,
-                                  child: VStack(
-                                    [
-                                      Container(
-                                        height: 175,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(Dimensions.radius5),
-                                            topLeft: Radius.circular(Dimensions.radius5),
-                                          ),
-                                          image: DecorationImage(
-                                            image: NetworkImage('http://image.tmdb.org/t/p/w500${popular[index]["poster_path"]}'),
-                                            fit: BoxFit.cover
-                                          )
+                              child: VxContinuousRectangle(
+                                backgroundColor: secondaryBlue,
+                                radius: Dimensions.radius10,
+                                width: 115,
+                                child: VStack(
+                                  [
+                                    Container(
+                                      height: 175,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(Dimensions.radius5),
+                                          topLeft: Radius.circular(Dimensions.radius5),
                                         ),
+                                        image: DecorationImage(
+                                          image: NetworkImage('http://image.tmdb.org/t/p/w500${controller.listPopular[index].posterPath}'),
+                                          fit: BoxFit.cover
+                                        )
                                       ),
-                                      VStack(
-                                        [
-                                          const SizedBox(height: 10,),
-                                          Text('${popular[index]["title"]}',).text.white.size(Dimensions.font14).overflow(TextOverflow.ellipsis).make(),
-                                          const SizedBox(height: 10,),
-                                          VStack(
-                                            [
-                                              Text('${DateFormat.y().format(DateTime.parse(popular[index]["release_date"]))} Action').text.light.size(Dimensions.font8).white.make(),
-                                              SizedBox(height: Dimensions.height5,),
-                                              HStack(
-                                                [
-                                                  Icon(
-                                                    Icons.star,
-                                                    color: Colors.yellow,
-                                                    size: Dimensions.font12,
-                                                  ),
-                                                  ' ${popular[index]["vote_average"]} '.text.light.size(Dimensions.font8).white.make(),
-                                                  '(${popular[index]["vote_count"]})'.text.light.size(Dimensions.font8).white.make(),
-                                                ]
-                                              )
-                                            ]
-                                          )
-                                        ],
-                                        alignment: MainAxisAlignment.spaceBetween,
-                                        crossAlignment: CrossAxisAlignment.start,
-                                      ).px8(),
-                                    ],
-                                  ),
-                                ).px4(),
-                              );
-                            }
-                          )
-                      ).height(250).make(),
-                    ],
-                  );
-                }),
+                                    ),
+                                    VStack(
+                                      [
+                                        const SizedBox(height: 10,),
+                                        Text('${controller.listPopular[index].title}',).text.white.size(Dimensions.font14).overflow(TextOverflow.ellipsis).make(),
+                                        const SizedBox(height: 10,),
+                                        VStack(
+                                          [
+                                            Text('${DateFormat.y().format(DateTime.parse(controller.listPopular[index].releaseDate.toString()))} Action').text.light.size(Dimensions.font8).white.make(),
+                                            SizedBox(height: Dimensions.height5,),
+                                            HStack(
+                                              [
+                                                Icon(
+                                                  Icons.star,
+                                                  color: Colors.yellow,
+                                                  size: Dimensions.font12,
+                                                ),
+                                                ' ${controller.listPopular[index].voteAverage} '.text.light.size(Dimensions.font8).white.make(),
+                                                '(${controller.listPopular[index].voteCount})'.text.light.size(Dimensions.font8).white.make(),
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ],
+                                      alignment: MainAxisAlignment.spaceBetween,
+                                      crossAlignment: CrossAxisAlignment.start,
+                                    ).px8(),
+                                  ],
+                                ),
+                              ).px4(),
+                            );
+                          }
+                        )
+                    ).height(250).make(),
+                  ]
+                ),
+                onEmpty: VxBox(
+                  child: Image.asset(
+                    'assets/images/nodata.jpg',
+                    fit: BoxFit.cover,
+                  )
+                ).color(Colors.white).width(Get.width).height(250).make(),
+                onLoading: const CircularProgressIndicator()
               ),
 
               // === TOP RATED SECTION ====
-              FutureBuilder(
-                future: controller.getTopRated(),
-                builder: ((context, AsyncSnapshot snapshot){
-                  if(snapshot.connectionState == ConnectionState.waiting){
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-      
-                  var topRated = snapshot.data!; //List<dynamic>
-
-                  return VStack(
-                    [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
-                        child: Row(
-                          children: [
-                            const Text('Top Rated').text.white.semiBold.size(Dimensions.font18).make(),
-                            InkWell(
+              controller.obx(
+                (data) => VStack(
+                  [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+                      child: Row(
+                        children: [
+                          const Text('Top Rated').text.white.semiBold.size(Dimensions.font18).make(),
+                          InkWell(
+                            onTap: (){
+                              Get.toNamed(
+                                Routes.SEE_ALL,
+                                arguments: [
+                                  {"title" : "Popular"},
+                                  controller.listTopRated,
+                                ]
+                              );
+                            },
+                            child: const Text('SEE ALL').text.color(tosca).size(Dimensions.font12).make()
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                    ),
+                    VxBox(
+                      child:
+                        ListView.builder(
+                          physics: const ClampingScrollPhysics(),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: controller.listTopRated.length - 15,
+                          itemBuilder: (context, index){
+                            return InkWell(
                               onTap: (){
                                 Get.toNamed(
-                                  Routes.SEE_ALL,
-                                  arguments: [
-                                    {"title" : "Top Rated"},
-                                    topRated,
-                                  ]
+                                  Routes.DETAIL_PAGE,
+                                  arguments: controller.listTopRated[index]
                                 );
                               },
-                              child: const Text('SEE ALL').text.color(tosca).size(Dimensions.font12).make()
-                            ),
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        ),
-                      ),
-                      VxBox(
-                        child:
-                          ListView.builder(
-                            physics: const ClampingScrollPhysics(),
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: topRated.length - 15,
-                            itemBuilder: (context, index){
-              
-                              return InkWell(
-                                onTap: (){
-                                  Get.toNamed(
-                                    Routes.DETAIL_PAGE,
-                                    arguments: topRated[index]
-                                  );
-                                },
-                                child: VxContinuousRectangle(
-                                  backgroundColor: secondaryBlue,
-                                  radius: Dimensions.radius10,
-                                  width: 115,
-                                  child: VStack(
-                                    [
-                                      Container(
-                                        height: 175,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(Dimensions.radius5),
-                                            topLeft: Radius.circular(Dimensions.radius5),
-                                          ),
-                                          image: DecorationImage(
-                                            image: NetworkImage('http://image.tmdb.org/t/p/w500${topRated[index]["poster_path"]}'),
-                                            fit: BoxFit.cover
-                                          )
+                              child: VxContinuousRectangle(
+                                backgroundColor: secondaryBlue,
+                                radius: Dimensions.radius10,
+                                width: 115,
+                                child: VStack(
+                                  [
+                                    Container(
+                                      height: 175,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(Dimensions.radius5),
+                                          topLeft: Radius.circular(Dimensions.radius5),
                                         ),
+                                        image: DecorationImage(
+                                          image: NetworkImage('http://image.tmdb.org/t/p/w500${controller.listTopRated[index].posterPath}'),
+                                          fit: BoxFit.cover
+                                        )
                                       ),
-                                      VStack(
-                                        [
-                                          const SizedBox(height: 10,),
-                                          Text('${topRated[index]["title"]}',).text.white.size(Dimensions.font14).overflow(TextOverflow.ellipsis).make(),
-                                          const SizedBox(height: 10,),
-                                          VStack(
-                                            [
-                                              Text('${DateFormat.y().format(DateTime.parse(topRated[index]["release_date"]))} Action').text.light.size(Dimensions.font8).white.make(),
-                                              SizedBox(height: Dimensions.height5,),
-                                              HStack(
-                                                [
-                                                  Icon(
-                                                    Icons.star,
-                                                    color: Colors.yellow,
-                                                    size: Dimensions.font12,
-                                                  ),
-                                                  ' ${topRated[index]["vote_average"]} '.text.light.size(Dimensions.font8).white.make(),
-                                                  '(${topRated[index]["vote_count"]})'.text.light.size(Dimensions.font8).white.make(),
-                                                ]
-                                              )
-                                            ]
-                                          )
-                                        ],
-                                        alignment: MainAxisAlignment.spaceBetween,
-                                        crossAlignment: CrossAxisAlignment.start,
-                                      ).px8(),
-                                    ],
-                                  ),
-                                ).px4(),
-                              );
-                            }
-                          )
-                      ).height(250).make(),
-                    ],
-                  );
-                }),
+                                    ),
+                                    VStack(
+                                      [
+                                        const SizedBox(height: 10,),
+                                        Text('${controller.listTopRated[index].title}',).text.white.size(Dimensions.font14).overflow(TextOverflow.ellipsis).make(),
+                                        const SizedBox(height: 10,),
+                                        VStack(
+                                          [
+                                            Text('${DateFormat.y().format(DateTime.parse(controller.listTopRated[index].releaseDate.toString()))} Action').text.light.size(Dimensions.font8).white.make(),
+                                            SizedBox(height: Dimensions.height5,),
+                                            HStack(
+                                              [
+                                                Icon(
+                                                  Icons.star,
+                                                  color: Colors.yellow,
+                                                  size: Dimensions.font12,
+                                                ),
+                                                ' ${controller.listTopRated[index].voteAverage} '.text.light.size(Dimensions.font8).white.make(),
+                                                '(${controller.listTopRated[index].voteCount})'.text.light.size(Dimensions.font8).white.make(),
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ],
+                                      alignment: MainAxisAlignment.spaceBetween,
+                                      crossAlignment: CrossAxisAlignment.start,
+                                    ).px8(),
+                                  ],
+                                ),
+                              ).px4(),
+                            );
+                          }
+                        )
+                    ).height(250).make(),
+                  ]
+                ),
+                onEmpty: VxBox(
+                  child: Image.asset(
+                    'assets/images/nodata.jpg',
+                    fit: BoxFit.cover,
+                  )
+                ).color(Colors.white).width(Get.width).height(250).make(),
+                onLoading: const CircularProgressIndicator()
               ),
 
               // === UPCOMING SECTION ====
-              FutureBuilder(
-                future: controller.getUpcoming(),
-                builder: ((context, AsyncSnapshot snapshot){
-                  if(snapshot.connectionState == ConnectionState.waiting){
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-      
-                  var upComing = snapshot.data!; //List<dynamic>
-
-                  return VStack(
-                    [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
-                        child: Row(
-                          children: [
-                            const Text('Upcoming').text.white.semiBold.size(Dimensions.font18).make(),
-                            InkWell(
+              controller.obx(
+                (data) => VStack(
+                  [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+                      child: Row(
+                        children: [
+                          const Text('Top Rated').text.white.semiBold.size(Dimensions.font18).make(),
+                          InkWell(
+                            onTap: (){
+                              Get.toNamed(
+                                Routes.SEE_ALL,
+                                arguments: [
+                                  {"title" : "Upcoming"},
+                                  controller.listUpcoming,
+                                ]
+                              );
+                            },
+                            child: const Text('SEE ALL').text.color(tosca).size(Dimensions.font12).make()
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                    ),
+                    VxBox(
+                      child:
+                        ListView.builder(
+                          physics: const ClampingScrollPhysics(),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: controller.listUpcoming.length - 15,
+                          itemBuilder: (context, index){
+                            return InkWell(
                               onTap: (){
                                 Get.toNamed(
-                                  Routes.SEE_ALL,
-                                  arguments: [
-                                    {"title" : "Upcoming"},
-                                    upComing,
-                                  ]
+                                  Routes.DETAIL_PAGE,
+                                  arguments: controller.listUpcoming[index]
                                 );
                               },
-                              child: const Text('SEE ALL').text.color(tosca).size(Dimensions.font12).make()
-                            ),
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        ),
-                      ),
-                      VxBox(
-                        child:
-                          ListView.builder(
-                            physics: const ClampingScrollPhysics(),
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: upComing.length - 15,
-                            itemBuilder: (context, index){
-              
-                              return InkWell(
-                                onTap: (){
-                                  Get.toNamed(
-                                    Routes.DETAIL_PAGE,
-                                    arguments: upComing[index]
-                                  );
-                                },
-                                child: VxContinuousRectangle(
-                                  backgroundColor: secondaryBlue,
-                                  radius: Dimensions.radius10,
-                                  width: 115,
-                                  child: VStack(
-                                    [
-                                      Container(
-                                        height: 175,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(Dimensions.radius5),
-                                            topLeft: Radius.circular(Dimensions.radius5),
-                                          ),
-                                          image: DecorationImage(
-                                            image: NetworkImage('http://image.tmdb.org/t/p/w500${upComing[index]["poster_path"]}'),
-                                            fit: BoxFit.cover
-                                          )
+                              child: VxContinuousRectangle(
+                                backgroundColor: secondaryBlue,
+                                radius: Dimensions.radius10,
+                                width: 115,
+                                child: VStack(
+                                  [
+                                    Container(
+                                      height: 175,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(Dimensions.radius5),
+                                          topLeft: Radius.circular(Dimensions.radius5),
                                         ),
+                                        image: DecorationImage(
+                                          image: NetworkImage('http://image.tmdb.org/t/p/w500${controller.listUpcoming[index].posterPath}'),
+                                          fit: BoxFit.cover
+                                        )
                                       ),
-                                      VStack(
-                                        [
-                                          const SizedBox(height: 10,),
-                                          Text('${upComing[index]["title"]}',).text.white.size(Dimensions.font14).overflow(TextOverflow.ellipsis).make(),
-                                          const SizedBox(height: 10,),
-                                          VStack(
-                                            [
-                                              Text('${DateFormat.y().format(DateTime.parse(upComing[index]["release_date"]))} Action').text.light.size(Dimensions.font8).white.make(),
-                                              SizedBox(height: Dimensions.height5,),
-                                              HStack(
-                                                [
-                                                  Icon(
-                                                    Icons.star,
-                                                    color: Colors.yellow,
-                                                    size: Dimensions.font12,
-                                                  ),
-                                                  ' ${upComing[index]["vote_average"]} '.text.light.size(Dimensions.font8).white.make(),
-                                                  '(${upComing[index]["vote_count"]})'.text.light.size(Dimensions.font8).white.make(),
-                                                ]
-                                              )
-                                            ]
-                                          )
-                                        ],
-                                        alignment: MainAxisAlignment.spaceBetween,
-                                        crossAlignment: CrossAxisAlignment.start,
-                                      ).px8(),
-                                    ],
-                                  ),
-                                ).px4(),
-                              );
-                            }
-                          )
-                      ).height(250).make(),
-                    ],
-                  );
-                }),
+                                    ),
+                                    VStack(
+                                      [
+                                        const SizedBox(height: 10,),
+                                        Text('${controller.listUpcoming[index].title}',).text.white.size(Dimensions.font14).overflow(TextOverflow.ellipsis).make(),
+                                        const SizedBox(height: 10,),
+                                        VStack(
+                                          [
+                                            Text('${DateFormat.y().format(DateTime.parse(controller.listUpcoming[index].releaseDate.toString()))} Action').text.light.size(Dimensions.font8).white.make(),
+                                            SizedBox(height: Dimensions.height5,),
+                                            HStack(
+                                              [
+                                                Icon(
+                                                  Icons.star,
+                                                  color: Colors.yellow,
+                                                  size: Dimensions.font12,
+                                                ),
+                                                ' ${controller.listUpcoming[index].voteAverage} '.text.light.size(Dimensions.font8).white.make(),
+                                                '(${controller.listUpcoming[index].voteCount})'.text.light.size(Dimensions.font8).white.make(),
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ],
+                                      alignment: MainAxisAlignment.spaceBetween,
+                                      crossAlignment: CrossAxisAlignment.start,
+                                    ).px8(),
+                                  ],
+                                ),
+                              ).px4(),
+                            );
+                          }
+                        )
+                    ).height(250).make(),
+                  ]
+                ),
+                onEmpty: VxBox(
+                  child: Image.asset(
+                    'assets/images/nodata.jpg',
+                    fit: BoxFit.cover,
+                  )
+                ).color(Colors.white).width(Get.width).height(250).make(),
+                onLoading: const CircularProgressIndicator()
               ),
+
               SizedBox(height: Dimensions.height20,),
             ]
           ),

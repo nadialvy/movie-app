@@ -2,97 +2,64 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:movie_app/app/models/list_movie_model.dart';
+import 'package:movie_app/app/modules/home/repository/homeProvider.dart';
 
-class HomeController extends GetxController {
-  List<dynamic> nowPlaying = [];
-  List<dynamic> popular = [];
-  List<dynamic> topRated = [];
-  List<dynamic> upComing = [];
+class HomeController extends GetxController with StateMixin {
+  final HomeProvider homeProvider;
+  HomeController({required this.homeProvider});
+
+  final listNowPlaying = <Results>[].obs;
+  final listPopular = <Results>[].obs;
+  final listTopRated = <Results>[].obs;
+  final listUpcoming = <Results>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    getNowPlaying();
-    getTopRated();
-    getUpcoming();
+
+    fetchNowPlaying();
+    fetchPopular();
+    fetchTopRated();
+    fetchUpcoming();
   }
 
-  Future<List<dynamic>> getNowPlaying() async{
-    try{
-      var resp = await http.get(
-        Uri.parse('https://api.themoviedb.org/3/movie/now_playing?api_key=81728309a12b337c7334a06681733deb')
-      );
-
-      nowPlaying = json.decode(resp.body)['results'] as List;
-      update();
-
-      return nowPlaying;
-    }catch (e){
-      print(e);
-      return [
-        "message", "Cannot get data"
-      ];
-    }
+  void fetchNowPlaying(){
+    homeProvider.getNowPlaying().then((result){
+      listNowPlaying.value = ListMovieModel.fromJson(result.body).results!;
+      change(null, status: RxStatus.success());
+    }, onError: (err){
+      change(null, status: RxStatus.error(err.toString()));
+    });
   }
 
-  Future<List<dynamic>> getPopular() async{
-    try{
-      var resp = await http.get(
-        Uri.parse('https://api.themoviedb.org/3/movie/popular?api_key=81728309a12b337c7334a06681733deb')
-      );
-
-      popular = json.decode(resp.body)['results'] as List;
-      update();
-
-      return popular;
-    }catch(e){
-      print(e);
-      return [
-        {
-          "message": "Cannot get data"
-        }
-      ];
-    }
+  void fetchPopular(){
+    homeProvider.getPopular().then((result){
+      listPopular.value = ListMovieModel.fromJson(result.body).results!;
+      change(null, status: RxStatus.success());
+    }, onError: (err){
+      change(null, status: RxStatus.error(err.toString()));
+    });
   }
 
-  Future<List<dynamic>> getTopRated() async{
-    try{
-      var resp = await http.get(
-        Uri.parse('https://api.themoviedb.org/3/movie/top_rated?api_key=81728309a12b337c7334a06681733deb')
-      );
-
-     topRated = json.decode(resp.body)['results'] as List;
-     update();
-
-     return topRated;
-    }catch(e){
-      print(e);
-      return [
-        {
-          "message": "Cannot get data"
-        }
-      ];
-    }
+  void fetchTopRated(){
+    homeProvider.getTopRated().then((result){
+      listTopRated.value = ListMovieModel.fromJson(result.body).results!;
+      change(null, status: RxStatus.success());
+    }, onError: (err){
+      change(null, status: RxStatus.error(err.toString()));
+    });
   }
 
-  Future<List<dynamic>> getUpcoming() async{
-    try{
-      var resp = await http.get(
-        Uri.parse('https://api.themoviedb.org/3/movie/upcoming?api_key=81728309a12b337c7334a06681733deb')
-      );
-
-      upComing = json.decode(resp.body)['results'] as List;
-      update();
-
-      return upComing;
-    }catch(e){
-      print(e);
-      return [
-        {
-          "message": "Cannot get data"
-        }
-      ];
-    }
+  void fetchUpcoming(){
+    homeProvider.getUpcoming().then((result){
+      listUpcoming.value = ListMovieModel.fromJson(result.body).results!;
+      change(null, status: RxStatus.success());
+    }, onError: (err){
+      change(null, status: RxStatus.error(err.toString()));
+    });
   }
+
+  
 
 }
