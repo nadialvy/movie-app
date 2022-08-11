@@ -37,45 +37,47 @@ class SeeAllView extends GetView<SeeAllController> {
             child: VxBox(
               child: HStack(
                 [
-                  HStack(
-                    [
-                      VxContinuousRectangle(
-                        backgroundColor: mainBlue,
-                        radius: 10,
-                        width: 75,
-                        height: 125,
-                        backgroundImage: DecorationImage(
-                          image: NetworkImage('http://image.tmdb.org/t/p/w500${listMovie[index]["poster_path"]}'),
-                          fit: BoxFit.cover
+                  Expanded(
+                    child: HStack(
+                      [
+                        VxContinuousRectangle(
+                          backgroundColor: mainBlue,
+                          radius: 10,
+                          width: 75,
+                          height: 125,
+                          backgroundImage: DecorationImage(
+                            image: NetworkImage('http://image.tmdb.org/t/p/w500${listMovie[index]["poster_path"]}'),
+                            fit: BoxFit.cover
+                          ),
                         ),
-                      ),
-                      SizedBox(width: Dimensions.width10,),
-                      VStack(
-                          [
-                            Flexible(
-                              child: Text(
-                              '${listMovie[index]["title"]}',
-                              ).text.semiBold.white.size(Dimensions.font18).make(),
-                            ),
-                          SizedBox(height: Dimensions.height5,),
-                          Text('${listMovie[index]["release_date"]}').text.size(Dimensions.font12).color(tosca).make(),
-                          SizedBox(height: Dimensions.height5,),
-                          Text('Action, Adventure, Fantasy').text.light.size(Dimensions.font12).white.make(),
-                          HStack(
-                            [
-                              VxRating(
-                                onRatingUpdate: (value) {},
-                                count: 5,
-                                selectionColor: Colors.yellow,
-                                size: Dimensions.font12,
-                              ),
-                              Text(' ${listMovie[index]["vote_average"]} (${listMovie[index]["vote_count"]})').text.light.size(Dimensions.font12).white.make()
-                            ]
-                          )
-                        ],
-                      ),
-                    ],
-                    crossAlignment: CrossAxisAlignment.start,
+                        SizedBox(width: Dimensions.width10,),
+                        Expanded(
+                          child: VStack(
+                              [
+                                Text(
+                                '${listMovie[index]["title"]}',
+                                ).text.overflow(TextOverflow.visible).semiBold.white.size(Dimensions.font18).make(),
+                              SizedBox(height: Dimensions.height5,),
+                              Text('${listMovie[index]["release_date"]}').text.size(Dimensions.font12).color(tosca).make(),
+                              SizedBox(height: Dimensions.height5,),
+                              Text('Action, Adventure, Fantasy').text.light.size(Dimensions.font12).white.make(),
+                              HStack(
+                                [
+                                  VxRating(
+                                    onRatingUpdate: (value) {},
+                                    count: 5,
+                                    selectionColor: Colors.yellow,
+                                    size: Dimensions.font12,
+                                  ),
+                                  Text(' ${listMovie[index]["vote_average"]} (${listMovie[index]["vote_count"]})').text.light.size(Dimensions.font12).white.make()
+                                ]
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                      crossAlignment: CrossAxisAlignment.start,
+                    ),
                   ),
                   Icon(
                     Icons.bookmark_border,
