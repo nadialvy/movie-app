@@ -67,10 +67,13 @@ class ListAllMovies extends StatelessWidget {
                               HStack(
                                 [
                                   VxRating(
-                                    onRatingUpdate: (value) {},
+                                    maxRating: 5.0,
+                                    value: listMovie[index].voteAverage! / 2,
                                     count: 5,
                                     selectionColor: Colors.yellow,
-                                    size: Dimensions.font12,
+                                    normalColor: Colors.grey,
+                                    size: Dimensions.font14,
+                                    onRatingUpdate: (String val) {},
                                   ),
                                   Text(' ${listMovie[index].voteAverage} (${listMovie[index].voteCount})').text.light.size(Dimensions.font12).white.make()
                                 ]

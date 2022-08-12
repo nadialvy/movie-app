@@ -32,38 +32,34 @@ class Carousel extends StatelessWidget {
               image: NetworkImage('http://image.tmdb.org/t/p/w500${listMovie[index].posterPath}'),
               fit: BoxFit.cover,
             ),
-            child: Expanded(
-              child: VStack(
-                [
-                  VxContinuousRectangle(
-                    width: Dimensions.width250,
-                    height: Dimensions.height125,
-                    radius: Dimensions.radius20,
-                    backgroundImage: DecorationImage(
-                      image: NetworkImage('http://image.tmdb.org/t/p/w500${listMovie[index].posterPath}'),
-                      fit: BoxFit.cover
-                    ),  
-                  ),
-                  SizedBox(height: Dimensions.height5,),
-                  '${listMovie[index].title}'.text.white.bold.size(Dimensions.font16).make(),
-                  Expanded(
-                    child: HStack(
-                      [
-                        Icon(
-                          Icons.star,
-                          color: Colors.yellow,
-                          size: Dimensions.font12,
-                        ),
-                        ' ${listMovie[index].voteAverage} '.text.size(Dimensions.font14).white.make(),
-                        '(${listMovie[index].voteCount})'.text.size(Dimensions.font14).white.make(),
-                      ]
+            child: VStack(
+              [
+                VxContinuousRectangle(
+                  width: Dimensions.width250,
+                  height: Dimensions.height125,
+                  radius: Dimensions.radius20,
+                  backgroundImage: DecorationImage(
+                    image: NetworkImage('http://image.tmdb.org/t/p/w500${listMovie[index].posterPath}'),
+                    fit: BoxFit.cover
+                  ),  
+                ),
+                SizedBox(height: Dimensions.height5,),
+                '${listMovie[index].title}'.text.white.bold.size(Dimensions.font16).make(),
+                HStack(
+                  [
+                    Icon(
+                      Icons.star,
+                      color: Colors.yellow,
+                      size: Dimensions.font12,
                     ),
-                  )
-                ],
-                crossAlignment: CrossAxisAlignment.center,
-                alignment: MainAxisAlignment.spaceAround,
-              ).p12(),
-            ),
+                    ' ${listMovie[index].voteAverage} '.text.size(Dimensions.font14).white.make(),
+                    '(${listMovie[index].voteCount})'.text.size(Dimensions.font14).white.make(),
+                  ]
+                )
+              ],
+              crossAlignment: CrossAxisAlignment.center,
+              alignment: MainAxisAlignment.spaceAround,
+            ).p12(),
           ).p4(),
         );
       }

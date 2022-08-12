@@ -51,10 +51,13 @@ class DetailMovie extends StatelessWidget {
                 HStack(
                   [
                     VxRating(
-                      onRatingUpdate: (value) {},
+                      maxRating: 5.0,
+                      value: detailMovie.voteAverage! / 2.0,
                       count: 5,
                       selectionColor: Colors.yellow,
+                      normalColor: Colors.grey,
                       size: Dimensions.font14,
+                      onRatingUpdate: (String val) {},
                     ),
                     const Text(' (5.12k reviews)').text.light.size(Dimensions.font14).white.make()
                   ]
