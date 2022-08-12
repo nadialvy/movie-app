@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:intl/intl.dart';
 import 'package:movie_app/app/constant/colors.dart';
 import 'package:movie_app/app/constant/dimension.dart';
@@ -22,7 +20,7 @@ class ListCardHorizontal extends StatelessWidget{
             physics: const ClampingScrollPhysics(),
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-            itemCount: listMovie.length - 15,
+            itemCount: (listMovie.length - Dimensions.totalCardHorizontal),
             itemBuilder: (context, index){
               return InkWell(
                 onTap: (){
@@ -34,11 +32,11 @@ class ListCardHorizontal extends StatelessWidget{
                 child: VxContinuousRectangle(
                   backgroundColor: secondaryBlue,
                   radius: Dimensions.radius10,
-                  width: 115,
+                  width: Dimensions.width115,
                   child: VStack(
                     [
                       Container(
-                        height: 175,
+                        height: Dimensions.height175,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
                             topRight: Radius.circular(Dimensions.radius5),
@@ -50,39 +48,47 @@ class ListCardHorizontal extends StatelessWidget{
                           )
                         ),
                       ),
-                      VStack(
-                        [
-                          const SizedBox(height: 10,),
-                          Text('${listMovie[index].title}',).text.white.size(Dimensions.font14).overflow(TextOverflow.ellipsis).make(),
-                          const SizedBox(height: 10,),
-                          VStack(
-                            [
-                              Text('${DateFormat.y().format(DateTime.parse(listMovie[index].releaseDate.toString()))} Action').text.light.size(Dimensions.font8).white.make(),
-                              SizedBox(height: Dimensions.height5,),
-                              HStack(
+                      Expanded(
+                        child: VStack(
+                          [
+                            SizedBox(height: Dimensions.height10,),
+                            Text(
+                              '${listMovie[index].title}'
+                            ).text.white.size(Dimensions.font14).overflow(TextOverflow.ellipsis).make(),
+                            SizedBox(height: Dimensions.height10,),
+                            Expanded(
+                              child: VStack(
                                 [
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.yellow,
-                                    size: Dimensions.font12,
-                                  ),
-                                  ' ${listMovie[index].voteAverage} '.text.light.size(Dimensions.font8).white.make(),
-                                  '(${listMovie[index].voteCount})'.text.light.size(Dimensions.font8).white.make(),
+                                  Text(
+                                    '${DateFormat.y().format(DateTime.parse(listMovie[index].releaseDate.toString()))} Action'
+                                  ).text.light.size(Dimensions.font8).white.make(),
+                                  SizedBox(height: Dimensions.height5,),
+                                  HStack(
+                                    [
+                                      Icon(
+                                        Icons.star,
+                                        color: Colors.yellow,
+                                        size: Dimensions.font12,
+                                      ),
+                                      ' ${listMovie[index].voteAverage} '.text.light.size(Dimensions.font8).white.make(),
+                                      '(${listMovie[index].voteCount})'.text.light.size(Dimensions.font8).white.make(),
+                                    ]
+                                  )
                                 ]
-                              )
-                            ]
-                          )
-                        ],
-                        alignment: MainAxisAlignment.spaceBetween,
-                        crossAlignment: CrossAxisAlignment.start,
-                      ).px8(),
+                              ),
+                            )
+                          ],
+                          alignment: MainAxisAlignment.spaceBetween,
+                          crossAlignment: CrossAxisAlignment.start,
+                        ).px8(),
+                      ),
                     ],
                   ),
                 ).px4(),
               );
             }
           ),
-        ).height(250).make();
+        ).height(Dimensions.height250).make();
   }
 
 }

@@ -32,12 +32,21 @@ class Dimensions {
   static double height20 = screenHeight/33.35;
   static double height50 = screenHeight/13.34;
   static double height53 = screenHeight/12.58;
+  static double height125 = screenHeight/5.3;
+  static double height150 = screenHeight/4.4;
+  static double height175 = screenHeight/3.8;
+  static double height250 = screenHeight/2.668;
 
   //width for padding
   static double width5 = screenWidth/82.4;
   static double width10 = screenWidth/40.12;
   static double width20 = screenWidth/20.6;
   static double width40 = screenWidth/10.3;
+  static double width75 = screenWidth/5;
+  static double width115 = screenWidth/3.3;
+  static double width250 = screenWidth/1.5;
 
+  static double cardDouble = screenWidth / 50;
+  static int totalCardHorizontal = cardDouble.toInt();
 
 }

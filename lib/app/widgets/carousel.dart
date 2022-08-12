@@ -14,7 +14,8 @@ class Carousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return VxSwiper.builder(
-      itemCount: listMovie.length - 15,
+      height: Get.height * 0.3,
+      itemCount: listMovie.length - Dimensions.totalCardHorizontal,
       itemBuilder: (context, index){
         return InkWell(
           onTap: (){
@@ -25,38 +26,43 @@ class Carousel extends StatelessWidget {
           },
           child: VxContinuousRectangle(
             backgroundColor: Colors.black,
-            radius: 10,
+            radius: Dimensions.radius10,
             backgroundImage: DecorationImage(
               colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
               image: NetworkImage('http://image.tmdb.org/t/p/w500${listMovie[index].posterPath}'),
               fit: BoxFit.cover,
-            ), 
-            child: VStack(
-              [
-                VxContinuousRectangle(
-                  width: 250,
-                  height: 125,
-                  radius: 20,
-                  backgroundImage: DecorationImage(
-                    image: NetworkImage('http://image.tmdb.org/t/p/w500${listMovie[index].posterPath}'),
-                    fit: BoxFit.cover
-                  ),  
-                ),
-                '${listMovie[index].title}'.text.white.bold.size(Dimensions.font18).make(),
-                HStack(
-                  [
-                    Icon(
-                      Icons.star,
-                      color: Colors.yellow,
-                      size: Dimensions.font12,
+            ),
+            child: Expanded(
+              child: VStack(
+                [
+                  VxContinuousRectangle(
+                    width: Dimensions.width250,
+                    height: Dimensions.height125,
+                    radius: Dimensions.radius20,
+                    backgroundImage: DecorationImage(
+                      image: NetworkImage('http://image.tmdb.org/t/p/w500${listMovie[index].posterPath}'),
+                      fit: BoxFit.cover
+                    ),  
+                  ),
+                  SizedBox(height: Dimensions.height5,),
+                  '${listMovie[index].title}'.text.white.bold.size(Dimensions.font16).make(),
+                  Expanded(
+                    child: HStack(
+                      [
+                        Icon(
+                          Icons.star,
+                          color: Colors.yellow,
+                          size: Dimensions.font12,
+                        ),
+                        ' ${listMovie[index].voteAverage} '.text.size(Dimensions.font14).white.make(),
+                        '(${listMovie[index].voteCount})'.text.size(Dimensions.font14).white.make(),
+                      ]
                     ),
-                    ' ${listMovie[index].voteAverage} '.text.size(Dimensions.font14).white.make(),
-                    '(${listMovie[index].voteCount})'.text.size(Dimensions.font14).white.make(),
-                  ]
-                )
-              ],
-              crossAlignment: CrossAxisAlignment.center,
-              alignment: MainAxisAlignment.spaceAround,
+                  )
+                ],
+                crossAlignment: CrossAxisAlignment.center,
+                alignment: MainAxisAlignment.spaceAround,
+              ).p12(),
             ),
           ).p4(),
         );
