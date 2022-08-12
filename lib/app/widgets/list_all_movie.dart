@@ -30,6 +30,9 @@ class ListAllMovies extends StatelessWidget {
       body: ListView.builder(
         itemCount: listMovie.length,
         itemBuilder: (context, index){
+
+          List genreNames = listMovie[index].genreIds!.where((item) => item.runtimeType != int).toList();
+
           return InkWell(
             onTap: (){
               Get.toNamed(
@@ -63,7 +66,7 @@ class ListAllMovies extends StatelessWidget {
                               SizedBox(height: Dimensions.height5,),
                               Text('${listMovie[index].releaseDate}').text.size(Dimensions.font12).color(tosca).make(),
                               SizedBox(height: Dimensions.height5,),
-                              Text('Action, Adventure, Fantasy').text.light.size(Dimensions.font12).white.make(),
+                              genreNames.join(" ").text.light.size(Dimensions.font12).white.make(),
                               HStack(
                                 [
                                   VxRating(

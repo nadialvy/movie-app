@@ -14,9 +14,12 @@ class Carousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return VxSwiper.builder(
-      height: Get.height * 0.3,
+      height: Get.height * 0.35,
       itemCount: listMovie.length - Dimensions.totalCardHorizontal,
       itemBuilder: (context, index){
+        
+        List genreNames = listMovie[index].genreIds!.where((item) => item.runtimeType != int).toList();
+
         return InkWell(
           onTap: (){
             Get.toNamed(
@@ -45,6 +48,7 @@ class Carousel extends StatelessWidget {
                 ),
                 SizedBox(height: Dimensions.height5,),
                 '${listMovie[index].title}'.text.white.bold.size(Dimensions.font16).make(),
+                genreNames.join(" ").text.white.light.size(Dimensions.font12).make(),
                 HStack(
                   [
                     Icon(
@@ -52,8 +56,8 @@ class Carousel extends StatelessWidget {
                       color: Colors.yellow,
                       size: Dimensions.font12,
                     ),
-                    ' ${listMovie[index].voteAverage} '.text.size(Dimensions.font14).white.make(),
-                    '(${listMovie[index].voteCount})'.text.size(Dimensions.font14).white.make(),
+                    ' ${listMovie[index].voteAverage} '.text.light.size(Dimensions.font12).white.make(),
+                    '(${listMovie[index].voteCount})'.text.light.size(Dimensions.font12).white.make(),
                   ]
                 )
               ],

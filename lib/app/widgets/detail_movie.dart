@@ -8,15 +8,14 @@ import '../constant/dimension.dart';
 import '../models/list_movie_model.dart';
 
 class DetailMovie extends StatelessWidget {
-  const DetailMovie({
-    Key? key,
-    required this.detailMovie,
-  }) : super(key: key);
+  DetailMovie({required this.detailMovie});
 
   final Results detailMovie;
 
   @override
   Widget build(BuildContext context) {
+    List genreNames = detailMovie.genreIds!.where((item) => item.runtimeType != int).toList();
+
     return Scaffold(
       backgroundColor: mainBlue,
       body: VxScrollVertical(
@@ -63,7 +62,7 @@ class DetailMovie extends StatelessWidget {
                   ]
                 ),
                 SizedBox(height: Dimensions.width10,),
-                const Text('Fantasy, Action, Adventure').text.light.color(const Color.fromARGB(255, 210, 209, 209)).size(Dimensions.font14).make(),
+                genreNames.join(" ").text.light.color(const Color.fromARGB(255, 210, 209, 209)).size(Dimensions.font14).make(),
                 SizedBox(height: Dimensions.width10,),
                 Text('${detailMovie.releaseDate}').text.light.color(const Color.fromARGB(255, 210, 209, 209)).size(Dimensions.font14).make(),
                 SizedBox(height: Dimensions.width10,),

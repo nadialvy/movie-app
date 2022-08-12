@@ -24,7 +24,7 @@ class ListMovieModel {
 class Results {
   bool? adult;
   String? backdropPath;
-  List<int>? genreIds;
+  List<dynamic>? genreIds;
   int? id;
   String? originalLanguage;
   String? originalTitle;
@@ -51,12 +51,13 @@ class Results {
       this.title,
       this.video,
       this.voteAverage,
-      this.voteCount});
+      this.voteCount,
+    });
 
   Results.fromJson(Map<String, dynamic> json) {
     adult = json['adult'];
     backdropPath = json['backdrop_path'];
-    genreIds = json['genre_ids'].cast<int>();
+    genreIds = json['genre_ids'];
     id = json['id'];
     originalLanguage = json['original_language'];
     originalTitle = json['original_title'];

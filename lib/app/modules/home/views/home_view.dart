@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:movie_app/app/constant/colors.dart';
 import 'package:movie_app/app/constant/dimension.dart';
 import 'package:movie_app/app/widgets/carousel.dart';
@@ -9,6 +10,7 @@ import 'package:movie_app/app/widgets/on_empty.dart';
 import 'package:movie_app/app/widgets/title_list_card_horizontal.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../../routes/app_pages.dart';
 import '../../../widgets/on_error.dart';
 import '../controllers/home_controller.dart';
 
@@ -31,7 +33,7 @@ class HomeView extends GetView<HomeController> {
                 ),
                 onError: (String? err) => const OnError(),
                 onEmpty:const OnEmpty(),
-                onLoading: const Center(child: CircularProgressIndicator())
+                onLoading: const Center(child: CircularProgressIndicator()),
               ),
               
               // === POPULAR SECTION ====
@@ -65,7 +67,7 @@ class HomeView extends GetView<HomeController> {
                 (data) => VStack(
                   [
                     TitleListCardHorizontal(listMovie: controller.listUpcoming, title: 'Upcoming'),
-                    ListCardHorizontal(listMovie: controller.listUpcoming,),
+                    ListCardHorizontal(listMovie: controller.listUpcoming)
                   ]
                 ),
                 onError: (String? err) => const OnError(),
