@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:velocity_x/velocity_x.dart';
-
 import '../constant/dimension.dart';
 import '../models/list_movie_model.dart';
 import '../routes/app_pages.dart';
@@ -17,9 +15,6 @@ class Carousel extends StatelessWidget {
       height: Get.height * 0.35,
       itemCount: listMovie.length - Dimensions.totalCardHorizontal,
       itemBuilder: (context, index){
-        
-        List genreNames = listMovie[index].genreIds!.where((item) => item.runtimeType != int).toList();
-
         return InkWell(
           onTap: (){
             Get.toNamed(
@@ -32,7 +27,7 @@ class Carousel extends StatelessWidget {
             radius: Dimensions.radius10,
             backgroundImage: DecorationImage(
               colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
-              image: NetworkImage('http://image.tmdb.org/t/p/w500${listMovie[index].posterPath}'),
+              image: NetworkImage('http://image.tmdb.org/t/p/w500${listMovie[index].backdropPath}'),
               fit: BoxFit.cover,
             ),
             child: VStack(
@@ -48,7 +43,9 @@ class Carousel extends StatelessWidget {
                 ),
                 SizedBox(height: Dimensions.height5,),
                 '${listMovie[index].title}'.text.white.bold.size(Dimensions.font16).make(),
-                genreNames.join(" ").text.white.light.size(Dimensions.font12).make(),
+                (listMovie[index].genreIds == null ? " " : listMovie[index].genreIds!.join(" ")).text.white.light.size(Dimensions.font12).make(),
+                // genreNames.join(" ").text.white.light.size(Dimensions.font12).make(),
+                // '${listMovie[index].genreIds}'.text.white.light.size(Dimensions.font12).make(),
                 HStack(
                   [
                     Icon(
