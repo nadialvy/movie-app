@@ -20,10 +20,19 @@ class HomeController extends GetxController with StateMixin {
     super.onInit();
 
     fetchDataGenres();
+
     fetchNowPlaying();
+    getGenreNames(listNowPlaying);
+    
     fetchPopular();
-    fetchTopRated();
+    getGenreNames(listPopular);
+
     fetchUpcoming();
+    getGenreNames(listUpcoming);
+
+    fetchTopRated();
+    getGenreNames(listTopRated);
+
   }
 
   void fetchDataGenres() async{
@@ -33,30 +42,32 @@ class HomeController extends GetxController with StateMixin {
       change(null, status: RxStatus.success());
     }, onError: (err){
       change(null, status: RxStatus.error());
-    }
-    );
+    });
   }
 
-  void fetchNowPlaying() async {
-    change(null, status: RxStatus.loading());
-    await homeProvider.getNowPlaying().then((result){
-      listNowPlaying.value = ListMovieModel.fromJson(result.body).results!;
-
-      for (var dataGenre in listDataGenres) {        
-        for (var value in listNowPlaying) {
-          for(int i = 0; i < value.genreIds!.length; i++){
-            if(dataGenre.id == value.genreIds![i]){
-              value.genreIds!.add(dataGenre.name);
-            }
+  void getGenreNames(List<Results> listMovie) {
+    for (var dataGenre in listDataGenres) {
+      for (var value in listMovie) {
+        for(int i = 0; i < value.genreIds!.length; i++){
+          if(dataGenre.id == value.genreIds![i]){
+            value.genreIds!.add(dataGenre.name);
           }
         }
       }
-      
+    }
+    //remove the int value
+    for(var value in listMovie){
+      value.genreIds!.removeWhere((element) => element.runtimeType == int);
+    }
+  }
 
-      for(var value in listNowPlaying){
-        value.genreIds!.removeWhere((element) => element.runtimeType == int);
-      }
 
+  void fetchNowPlaying() async {
+    change(null, status: RxStatus.loading());
+
+    await homeProvider.getNowPlaying().then((result){
+      listNowPlaying.value = ListMovieModel.fromJson(result.body).results!;
+      getGenreNames(listNowPlaying);
       change(null, status: RxStatus.success());
     }, onError: (err){
       change(null, status: RxStatus.error(err.toString()));
@@ -65,24 +76,10 @@ class HomeController extends GetxController with StateMixin {
 
   void fetchPopular() async {
     change(null, status: RxStatus.loading());
+
     await homeProvider.getPopular().then((result){
       listPopular.value = ListMovieModel.fromJson(result.body).results!;
-
-      for (var dataGenre in listDataGenres) {
-        for (var value in listPopular) {
-          for(int i = 0; i < value.genreIds!.length; i++){
-            if(dataGenre.id == value.genreIds![i]){
-              value.genreIds!.add(dataGenre.name);
-            }
-          }
-        }
-      }
-
-      for(var value in listPopular){
-        value.genreIds!.removeWhere((element) => element.runtimeType == int);
-      }
-      
-
+      getGenreNames(listPopular);
       change(null, status: RxStatus.success());
     }, onError: (err){
       change(null, status: RxStatus.error(err.toString()));
@@ -93,24 +90,7 @@ class HomeController extends GetxController with StateMixin {
     change(null, status: RxStatus.loading());
     await homeProvider.getTopRated().then((result){
       listTopRated.value = ListMovieModel.fromJson(result.body).results!;
-
-      for (var dataGenre in listDataGenres) {
-        for (var value in listTopRated) {
-          for(int i = 0; i < value.genreIds!.length; i++){
-            if(dataGenre.id == value.genreIds![i]){
-              value.genreIds!.add(dataGenre.name);
-            }
-          }
-        }
-      }
-
-      for(var value in listTopRated){
-        value.genreIds!.removeWhere((element) => element.runtimeType == int);
-      }
-
-      listTopRated.forEach((value){
-        print(value.genreIds);
-      });
+      getGenreNames(listTopRated);
 
       change(null, status: RxStatus.success());
     }, onError: (err){
@@ -122,21 +102,8 @@ class HomeController extends GetxController with StateMixin {
   void fetchUpcoming() async {
     change(null, status: RxStatus.loading());
     await homeProvider.getUpcoming().then((result){
-      listUpcoming.value = ListMovieModel.fromJson(result.body).results!;
-
-      for (var dataGenre in listDataGenres) {
-        for (var value in listUpcoming) {
-          for(int i = 0; i < value.genreIds!.length; i++){
-            if(dataGenre.id == value.genreIds![i]){
-              value.genreIds!.add(dataGenre.name);
-            }
-          }
-        }
-      }
-
-      for(var value in listUpcoming){
-        value.genreIds!.removeWhere((element) => element.runtimeType == int);
-      }
+      listUpcoming.value = ListMovieModel.fromJson(result.body).results!; 
+      getGenreNames(listUpcoming);
 
       change(null, status: RxStatus.success());
     }, onError: (err){
