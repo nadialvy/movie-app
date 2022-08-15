@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:movie_app/app/modules/home/controllers/home_controller.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../constant/dimension.dart';
 import '../models/list_movie_model.dart';
@@ -8,6 +9,8 @@ import '../routes/app_pages.dart';
 class Carousel extends StatelessWidget {
   final RxList<Results> listMovie;
   Carousel({required this.listMovie});
+
+  var homeC = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +46,7 @@ class Carousel extends StatelessWidget {
                 ),
                 SizedBox(height: Dimensions.height5,),
                 '${listMovie[index].title}'.text.white.bold.size(Dimensions.font16).make(),
-                (listMovie[index].genreIds == null ? " " : listMovie[index].genreIds!.join(" ")).text.white.light.size(Dimensions.font12).make(),
-                // genreNames.join(" ").text.white.light.size(Dimensions.font12).make(),
-                // '${listMovie[index].genreIds}'.text.white.light.size(Dimensions.font12).make(),
+                (listMovie[index].genreIds == null ? " " : homeC.getGenreNameById(listMovie[index].genreIds!).join(", ")).text.white.light.size(Dimensions.font12).make(),
                 HStack(
                   [
                     Icon(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:movie_app/app/modules/home/controllers/home_controller.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../constant/colors.dart';
@@ -8,7 +9,7 @@ import '../models/list_movie_model.dart';
 import '../routes/app_pages.dart';
 
 class ListAllMovies extends StatelessWidget {
-  const ListAllMovies({
+  ListAllMovies({
     Key? key,
     required this.title,
     required this.listMovie,
@@ -16,6 +17,7 @@ class ListAllMovies extends StatelessWidget {
 
   final Map<String, dynamic> title;
   final RxList<Results> listMovie;
+  var homeC = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +32,6 @@ class ListAllMovies extends StatelessWidget {
       body: ListView.builder(
         itemCount: listMovie.length,
         itemBuilder: (context, index){
-
-          List genreNames = listMovie[index].genreIds!.where((item) => item.runtimeType != int).toList();
-
           return InkWell(
             onTap: (){
               Get.toNamed(
@@ -66,7 +65,7 @@ class ListAllMovies extends StatelessWidget {
                               SizedBox(height: Dimensions.height5,),
                               Text('${listMovie[index].releaseDate}').text.size(Dimensions.font12).color(tosca).make(),
                               SizedBox(height: Dimensions.height5,),
-                              genreNames.join(" ").text.light.size(Dimensions.font12).white.make(),
+                              homeC.getGenreNameById(listMovie[index].genreIds!).join(", ").text.light.size(Dimensions.font12).white.make(),
                               HStack(
                                 [
                                   VxRating(

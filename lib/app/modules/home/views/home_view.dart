@@ -24,7 +24,7 @@ class HomeView extends GetView<HomeController> {
               (data) => VStack(
                 [
                   TitleListCardHorizontal(listMovie: controller.listNowPlaying, title: 'Now Playing'),
-                  controller.listNowPlaying.isNotEmpty || controller.listNowPlaying.length != null ? Carousel(listMovie: controller.listNowPlaying) : const CircularProgressIndicator()
+                  controller.listNowPlaying.isNotEmpty || controller.listNowPlaying.length != null ? Carousel(listMovie: controller.listNowPlaying) : const OnEmpty()
                 ]
               ),
               onLoading: const Center(child: CircularProgressIndicator()),
@@ -37,7 +37,7 @@ class HomeView extends GetView<HomeController> {
               (data) => VStack(
                 [
                   TitleListCardHorizontal(listMovie: controller.listPopular, title: 'Popular'),
-                  controller.listPopular.isNotEmpty || controller.listPopular.length != null ? ListCardHorizontal(listMovie: controller.listPopular) : const CircularProgressIndicator()
+                  controller.listPopular.isNotEmpty || controller.listPopular.length != null ? ListCardHorizontal(listMovie: controller.listPopular) : const OnEmpty()
                 ]
               ),
               onLoading: const Center(child: CircularProgressIndicator()),
@@ -50,7 +50,7 @@ class HomeView extends GetView<HomeController> {
               (data) => VStack(
                 [
                   TitleListCardHorizontal(listMovie: controller.listTopRated, title: 'Top Rated'),
-                  controller.listTopRated.isNotEmpty || controller.listTopRated.length != null ? ListCardHorizontal(listMovie: controller.listTopRated) : const CircularProgressIndicator()
+                  controller.listTopRated.isNotEmpty || controller.listTopRated.length != null ? ListCardHorizontal(listMovie: controller.listTopRated) : const OnEmpty()
                 ]
               ),
               onLoading: const Center(child: CircularProgressIndicator()),
@@ -63,7 +63,7 @@ class HomeView extends GetView<HomeController> {
               (data) => VStack(
                 [
                   TitleListCardHorizontal(listMovie: controller.listUpcoming, title: 'Upcoming'),
-                  controller.listUpcoming.isNotEmpty || controller.listUpcoming.length != null ? ListCardHorizontal(listMovie: controller.listUpcoming) : const CircularProgressIndicator()
+                  controller.listUpcoming.isNotEmpty || controller.listUpcoming.length != null ? ListCardHorizontal(listMovie: controller.listUpcoming) : const OnEmpty()
                 ]
               ),
               onLoading: const Center(child: CircularProgressIndicator()),

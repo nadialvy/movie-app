@@ -4,13 +4,15 @@ import 'package:intl/intl.dart';
 import 'package:movie_app/app/constant/colors.dart';
 import 'package:movie_app/app/constant/dimension.dart';
 import 'package:movie_app/app/models/list_movie_model.dart';
+import 'package:movie_app/app/modules/home/controllers/home_controller.dart';
 import 'package:movie_app/app/routes/app_pages.dart';
 import 'package:movie_app/app/widgets/on_empty.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class ListCardHorizontal extends StatelessWidget{
   final RxList<Results> listMovie;
-  const ListCardHorizontal({required this.listMovie});
+  ListCardHorizontal({required this.listMovie});
+  var homeC = Get.find<HomeController>();
 
   @override 
   Widget build(BuildContext context) {
@@ -60,9 +62,7 @@ class ListCardHorizontal extends StatelessWidget{
                                 child: VStack(
                                   [
                                     Text(
-                                      '${DateFormat.y().format(DateTime.parse(listMovie[index].releaseDate.toString()))} ${listMovie[index].genreIds!.isEmpty ? " " : listMovie[index].genreIds!.first}'
-
-                                      // ${listMovie[index].genreIds!.where((item) => item.runtimeType != int).toList()[0]}
+                                      '${DateFormat.y().format(DateTime.parse(listMovie[index].releaseDate.toString()))} ${listMovie[index].genreIds!.isEmpty ? " " : homeC.getGenreNameById(listMovie[index].genreIds!).first}',
                                     ).text.light.size(Dimensions.font8).white.make(),
                                     SizedBox(height: Dimensions.height5,),
                                     Expanded(
