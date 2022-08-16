@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movie_app/app/constant/dimension.dart';
+import 'package:movie_app/app/modules/home/controllers/home_controller.dart';
 import 'package:movie_app/app/routes/app_pages.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -10,8 +11,9 @@ import '../models/list_movie_model.dart';
 class TitleListCardHorizontal extends StatelessWidget {
   final RxList<Results> listMovie;
   final String title;
+  var homeC = Get.find<HomeController>();
 
-  const TitleListCardHorizontal({required this.listMovie, required this.title});
+  TitleListCardHorizontal({required this.listMovie, required this.title});
 
   @override
   Widget build(BuildContext context) {

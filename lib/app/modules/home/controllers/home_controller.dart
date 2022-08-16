@@ -1,20 +1,18 @@
 import 'package:get/get.dart';
 import 'package:movie_app/app/models/list_movie_model.dart';
-import 'package:movie_app/app/modules/home/repository/homeProvider.dart';
-
+import 'package:movie_app/app/modules/home/repository/home_repository.dart';
 import '../../../models/genre_model.dart';
 
 class HomeController extends GetxController with StateMixin {
-  final HomeProvider homeProvider;
-  HomeController({required this.homeProvider});
+  final HomeRepository homeRepository;
+  HomeController({required this.homeRepository});
 
   final listNowPlaying = <Results>[].obs;
   final listPopular = <Results>[].obs;
   final listTopRated = <Results>[].obs;
   final listUpcoming = <Results>[].obs;
   final listDataGenres = <Genres>[].obs;
-  final listUpdateGenre = <Genres>[].obs;
-  
+
   @override
   void onInit() {
     super.onInit();
@@ -24,11 +22,12 @@ class HomeController extends GetxController with StateMixin {
     fetchPopular();
     fetchUpcoming();
     fetchTopRated();
+    
   }
 
   void fetchDataGenres() async{
     change(null, status: RxStatus.loading());
-    await homeProvider.getDataGenre().then((result){
+    await homeRepository.getDataGenre().then((result){
       listDataGenres.value = GenreModel.fromJson(result.body).genres!;
       change(null, status: RxStatus.success());
     }, onError: (err){
@@ -46,7 +45,7 @@ class HomeController extends GetxController with StateMixin {
 
   void fetchNowPlaying() async {
     change(null, status: RxStatus.loading());
-    await homeProvider.getNowPlaying().then((result){
+    await homeRepository.getNowPlaying().then((result){
       listNowPlaying.value = ListMovieModel.fromJson(result.body).results!;
 
       if(listNowPlaying.value.isEmpty){
@@ -62,7 +61,7 @@ class HomeController extends GetxController with StateMixin {
 
   void fetchPopular() async {
     change(null, status: RxStatus.loading());
-    await homeProvider.getPopular().then((result){
+    await homeRepository.getPopular().then((result){
       listPopular.value = ListMovieModel.fromJson(result.body).results!;
 
       if(listPopular.value.isEmpty){
@@ -78,7 +77,7 @@ class HomeController extends GetxController with StateMixin {
 
   void fetchTopRated() async {
     change(null, status: RxStatus.loading());
-    await homeProvider.getTopRated().then((result){
+    await homeRepository.getTopRated().then((result){
       listTopRated.value = ListMovieModel.fromJson(result.body).results!;
 
       if(listTopRated.value.isEmpty){
@@ -96,7 +95,7 @@ class HomeController extends GetxController with StateMixin {
 
   void fetchUpcoming() async {
     change(null, status: RxStatus.loading());
-    await homeProvider.getUpcoming().then((result){
+    await homeRepository.getUpcoming().then((result){
       listUpcoming.value = ListMovieModel.fromJson(result.body).results!;
 
       if(listUpcoming.value.isEmpty){
@@ -109,6 +108,6 @@ class HomeController extends GetxController with StateMixin {
     }, onError: (err){
       change(null, status: RxStatus.error(err.toString()));
     });
-
   }
+
 }
