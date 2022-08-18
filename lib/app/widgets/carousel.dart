@@ -10,7 +10,7 @@ import '../routes/app_pages.dart';
 
 class Carousel extends StatelessWidget {
   final RxList<Results> listMovie;
-  Carousel({required this.listMovie});
+  Carousel({Key? key, required this.listMovie}) : super(key: key);
 
   var homeC = Get.find<HomeController>();
   DetailPageRepository detailPageRepository = Get.put(DetailPageRepository());

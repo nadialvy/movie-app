@@ -48,17 +48,17 @@ class SeeAllController extends GetxController{
     });
   }
 
-  void getMoreNowPlaying(var page) async {
+  void getMoreNowPlaying(int page) async {
     await seeAllRepository.getNowPlaying(page.toString()).then((result){
-      if(ListMovieModel.fromJson(result.body).results!.isNotEmpty){
-        isMoreDataAvailable(true);
+      if(ListMovieModel.fromJson(result.body).results!.isNotEmpty && ListMovieModel.fromJson(result.body).totalPages! <= page){
+        isMoreDataAvailable.value = true;
         homeC.listNowPlaying.addAll(ListMovieModel.fromJson(result.body).results!);
       }else{
-        isMoreDataAvailable(false);
+        isMoreDataAvailable.value = false;
       }
     },
     onError: (err){
-      isMoreDataAvailable(false);
+      isMoreDataAvailable.value = false;
     });
   }
 

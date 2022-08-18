@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movie_app/app/constant/colors.dart';
 import 'package:movie_app/app/constant/dimension.dart';
-import 'package:movie_app/app/modules/detail_page/controllers/detail_page_controller.dart';
-import 'package:movie_app/app/modules/detail_page/reporitory/detail_page_repository.dart';
 import 'package:movie_app/app/widgets/carousel.dart';
 import 'package:movie_app/app/widgets/list_card_horizontal.dart';
 import 'package:movie_app/app/widgets/on_empty.dart';

@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:movie_app/app/constant/colors.dart';
 import 'package:movie_app/app/constant/dimension.dart';
 import 'package:movie_app/app/models/list_movie_model.dart';
-import 'package:movie_app/app/modules/detail_page/controllers/detail_page_controller.dart';
 import 'package:movie_app/app/modules/home/controllers/home_controller.dart';
 import 'package:movie_app/app/routes/app_pages.dart';
 import 'package:movie_app/app/widgets/on_empty.dart';
