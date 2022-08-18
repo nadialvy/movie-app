@@ -4,19 +4,22 @@ import 'package:intl/intl.dart';
 import 'package:movie_app/app/constant/colors.dart';
 import 'package:movie_app/app/constant/dimension.dart';
 import 'package:movie_app/app/models/list_movie_model.dart';
+import 'package:movie_app/app/modules/detail_page/controllers/detail_page_controller.dart';
 import 'package:movie_app/app/modules/home/controllers/home_controller.dart';
 import 'package:movie_app/app/routes/app_pages.dart';
 import 'package:movie_app/app/widgets/on_empty.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class ListCardHorizontal extends StatelessWidget{
+
   final RxList<Results> listMovie;
-  ListCardHorizontal({required this.listMovie});
+  ListCardHorizontal({Key? key, required this.listMovie}) : super(key: key);
+  
   var homeC = Get.find<HomeController>();
 
   @override 
   Widget build(BuildContext context) {
-    if(listMovie.length != null){
+    if(listMovie.isNotEmpty){
       return VxBox(
         child: ListView.builder(
           physics: const ClampingScrollPhysics(),
@@ -28,7 +31,7 @@ class ListCardHorizontal extends StatelessWidget{
                   onTap: (){
                     Get.toNamed(
                       Routes.DETAIL_PAGE,
-                      arguments: listMovie[index]
+                      arguments: listMovie[index].id
                     );
                   },
                   child: VxContinuousRectangle(

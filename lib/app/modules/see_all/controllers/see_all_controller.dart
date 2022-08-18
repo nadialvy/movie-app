@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movie_app/app/modules/home/controllers/home_controller.dart';
 import 'package:movie_app/app/modules/see_all/repository/see_all_repository.dart';
-
 import '../../../models/list_movie_model.dart';
 
 class SeeAllController extends GetxController{

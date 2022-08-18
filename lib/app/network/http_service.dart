@@ -10,4 +10,10 @@ class HttpService extends GetConnect{
       "page" : page
     });
   }
+
+  Future<Response> getDetail(String endpoint, String id){
+    return get(BASE_URL+endpoint+id, query: {
+      "api_key" : API_KEY
+    });
+  }
 }

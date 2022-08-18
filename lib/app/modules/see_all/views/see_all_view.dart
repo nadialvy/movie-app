@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:movie_app/app/widgets/on_empty.dart';
-import 'package:movie_app/app/widgets/on_error.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../../../constant/colors.dart';
 import '../../../constant/dimension.dart';
@@ -51,7 +49,7 @@ class SeeAllView extends GetView<SeeAllController> {
               onTap: (){
                 Get.toNamed(
                   Routes.DETAIL_PAGE,
-                  arguments: listMovie[index]
+                  arguments: listMovie[index].id
                 );
               },
               child: VxBox(

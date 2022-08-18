@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:movie_app/app/modules/detail_page/controllers/detail_page_controller.dart';
+import 'package:movie_app/app/modules/detail_page/reporitory/detail_page_repository.dart';
 import 'package:movie_app/app/modules/home/controllers/home_controller.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../constant/dimension.dart';
@@ -11,6 +13,7 @@ class Carousel extends StatelessWidget {
   Carousel({required this.listMovie});
 
   var homeC = Get.find<HomeController>();
+  DetailPageRepository detailPageRepository = Get.put(DetailPageRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,7 @@ class Carousel extends StatelessWidget {
           onTap: (){
             Get.toNamed(
               Routes.DETAIL_PAGE,
-              arguments: listMovie[index]
+              arguments: listMovie[index].id
             );
           },
           child: VxContinuousRectangle(
