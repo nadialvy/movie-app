@@ -17,6 +17,7 @@ class SeeAllView extends GetView<SeeAllController> {
 
   @override
   Widget build(BuildContext context) {
+    print('dari view ${listMovie.length}');
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: mainBlue,

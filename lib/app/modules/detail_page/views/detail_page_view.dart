@@ -20,7 +20,7 @@ class DetailPageView extends GetView<DetailPageController> {
             [
               VxBox(
                 child: Image(
-                  image: NetworkImage(controller.detailMovie["poster_path"] != null ? 'http://image.tmdb.org/t/p/w500${controller.detailMovie["poster_path"]}' : 'https://dummyimage.com/300x300/000/fff&text=no+data'),
+                  image: NetworkImage(controller.detailMovie.value.posterPath != null ? 'http://image.tmdb.org/t/p/w500${controller.detailMovie.value.posterPath}' : 'https://dummyimage.com/300x300/000/fff&text=no+data'),
                   fit: BoxFit.cover,
                 )
               ).color(secondaryBlue).height(Get.height * 0.5).width(Get.width).make(),
@@ -30,7 +30,7 @@ class DetailPageView extends GetView<DetailPageController> {
                     children: [
                       Flexible(
                         child: Text(
-                          '${controller.detailMovie["title"]}',
+                          '${controller.detailMovie.value.title}',
                         ).text.overflow(TextOverflow.visible).semiBold.white.size(Dimensions.font20).make(),
                       ),
                       Icon(
@@ -47,7 +47,7 @@ class DetailPageView extends GetView<DetailPageController> {
                     [
                       VxRating(
                         maxRating: 5.0,
-                        value: controller.detailMovie['vote_average'] / 2.0,
+                        value: controller.detailMovie.value.voteAverage! / 2.0,
                         count: 5,
                         selectionColor: Colors.yellow,
                         normalColor: Colors.grey,
@@ -60,14 +60,14 @@ class DetailPageView extends GetView<DetailPageController> {
                   SizedBox(height: Dimensions.width10,),
 
                   Text(
-                    controller.getGenresName(controller.detailMovie["genres"])
+                    controller.getGenresName(controller.detailMovie.value.genres!)
                     .join(", ")
                   ).text.light.color(const Color.fromARGB(255, 210, 209, 209)).size(Dimensions.font14).make(),
                   
                   SizedBox(height: Dimensions.width10,),
                   
                   Text(
-                    controller.detailMovie["release_date"]
+                    controller.detailMovie.value.releaseDate!
                   ).text.light.color(const Color.fromARGB(255, 210, 209, 209)).size(Dimensions.font14).make(),
                   
                   SizedBox(height: Dimensions.width10,),
@@ -78,13 +78,13 @@ class DetailPageView extends GetView<DetailPageController> {
                         color: tosca,
                         size: Dimensions.font14,
                       ),
-                      Text(' ${controller.durationToString(controller.detailMovie["runtime"])}').text.light.color(tosca).size(Dimensions.font14).make()
+                      Text(' ${controller.durationToString(controller.detailMovie.value.runtime!)}').text.light.color(tosca).size(Dimensions.font14).make()
                     ]
                   ),
                   SizedBox(height: Dimensions.height20,),
                   const Text('Overview').text.white.semiBold.size(Dimensions.font20).make(),
                   SizedBox(height: Dimensions.height10,),
-                  Text('${controller.detailMovie["overview"]}').text.white.light.size(Dimensions.font14).make(),
+                  Text('${controller.detailMovie.value.overview}').text.white.light.size(Dimensions.font14).make(),
                 ]
               ).p20()
             ]

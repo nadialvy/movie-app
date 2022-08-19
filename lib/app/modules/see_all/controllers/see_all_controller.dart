@@ -7,132 +7,93 @@ import '../../../models/list_movie_model.dart';
 class SeeAllController extends GetxController{
   final SeeAllRepository seeAllRepository;
   SeeAllController({required this.seeAllRepository}); 
-
-  var homeC = Get.find<HomeController>();
-  var pageNowPlaying = 1;
-  var pagePopular = 1;
-  var pageTopRated = 1;
-  var pageUpcoming = 1;
   
+  List<dynamic> dataArguments = Get.arguments;
+  late Map<String, dynamic> title = dataArguments[0];
+  late List<Results> listMoviePage1 = dataArguments[1];
+  var listAllMovies = <Results>[].obs;
+
   //for pagination
+  var page = 1;
   ScrollController scrollController = ScrollController();
   var isMoreDataAvailable = true.obs;
 
   @override
   void onInit() {
     super.onInit();
-    paginateNowPlaying();
-    paginatePopular();
-    paginateTopRated();
-    paginateUpcoming();
+    listAllMovies.value = listMoviePage1;
+    paginateSeeAll();
   }
 
   void refreshList(){
-    pageNowPlaying = 1;
-    pagePopular = 1;
-    pageTopRated = 1;
-    pageUpcoming = 1;
-    homeC.fetchNowPlaying();
-    homeC.fetchPopular();
-    homeC.fetchTopRated();
-    homeC.fetchUpcoming();
+    page = 1;
+    getMoreMovies(title["title"], 1);
+    listMoviePage1.clear();
+    listAllMovies.value.clear();
   }
 
-  void paginateNowPlaying(){
+  void paginateSeeAll(){
     scrollController.addListener(() {
       if(scrollController.position.pixels == scrollController.position.maxScrollExtent){
-        pageNowPlaying++;
-        // print('nowplaying = $pageNowPlaying');
-        getMoreNowPlaying(pageNowPlaying);
+        page++;
+        getMoreMovies(title["title"], page);
       }
     });
   }
 
-  void getMoreNowPlaying(int page) async {
-    await seeAllRepository.getNowPlaying(page.toString()).then((result){
-      if(ListMovieModel.fromJson(result.body).results!.isNotEmpty){
-        isMoreDataAvailable(true);
-        homeC.listNowPlaying.addAll(ListMovieModel.fromJson(result.body).results!);
-      }else{
+  void getMoreMovies(String title, int page) async {
+    if(title == 'Now Playing'){
+      await seeAllRepository.getSeeAllMovie('now_playing', page.toString()).then((result){
+        if(ListMovieModel.fromJson(result.body).results!.isNotEmpty){
+          isMoreDataAvailable(true);
+          listAllMovies.addAll(ListMovieModel.fromJson(result.body).results!);
+        }else{
+          isMoreDataAvailable(false);
+        }
+      }, onError: (err){
         isMoreDataAvailable(false);
-      }
-    },
-    onError: (err){
-      isMoreDataAvailable(false);
-    });
-  }
-
-  void paginatePopular(){
-    scrollController.addListener(() {
-      if(scrollController.position.pixels == scrollController.position.maxScrollExtent){
-        pagePopular++;
-        // print('pop = $pagePopular');
-        getMorePopular(pagePopular);
-      }
-    });
-  }
-
-  void getMorePopular(var page) async {
-    await seeAllRepository.getPopular(page.toString()).then((result){
-      if(ListMovieModel.fromJson(result.body).results!.isNotEmpty){
-        isMoreDataAvailable(true);
-        homeC.listPopular.addAll(ListMovieModel.fromJson(result.body).results!);
-      }else{
+      });
+    }
+    else if(title == 'Popular'){
+      await seeAllRepository.getSeeAllMovie('popular', page.toString()).then((result){
+        if(ListMovieModel.fromJson(result.body).results!.isNotEmpty){
+          isMoreDataAvailable(true);
+          listAllMovies.addAll(ListMovieModel.fromJson(result.body).results!);
+        }else{
+          isMoreDataAvailable(false);
+        }
+      }, onError: (err){
         isMoreDataAvailable(false);
-      }
-    },
-    onError: (err){
-      isMoreDataAvailable(false);
-    });
-  }
-
-  void paginateTopRated(){
-    scrollController.addListener(() {
-      if(scrollController.position.pixels == scrollController.position.maxScrollExtent){
-        pageTopRated++;
-        // print('toprated : $pageTopRated');
-        getMoreTopRated(pageTopRated);
-      }
-    });
-  }
-
-  void getMoreTopRated(var page) async {
-    await seeAllRepository.getTopRated(page.toString()).then((result){
-      if(ListMovieModel.fromJson(result.body).results!.isNotEmpty){
-        isMoreDataAvailable(true);
-        homeC.listTopRated.addAll(ListMovieModel.fromJson(result.body).results!);
-      }else{
+      });
+    }
+    else if(title == 'Top Rated'){
+      await seeAllRepository.getSeeAllMovie('top_rated', page.toString()).then((result){
+        if(ListMovieModel.fromJson(result.body).results!.isNotEmpty){
+          isMoreDataAvailable(true);
+          listAllMovies.addAll(ListMovieModel.fromJson(result.body).results!);
+        }else{
+          isMoreDataAvailable(false);
+        }
+      }, onError: (err){
         isMoreDataAvailable(false);
-      }
-    },
-    onError: (err){
-      isMoreDataAvailable(false);
-    });
-  }
+      });
 
-  void paginateUpcoming(){
-    scrollController.addListener(() {
-      if(scrollController.position.pixels == scrollController.position.maxScrollExtent){
-        pageUpcoming++;
-        // print('UPC : $pageUpcoming');
-        getMoreUpcoming(pageUpcoming);
-      }
-    });
-  }
-
-  void getMoreUpcoming(var page) async {
-    await seeAllRepository.getUpcoming(page.toString()).then((result){
-      if(ListMovieModel.fromJson(result.body).results!.isNotEmpty){
-        isMoreDataAvailable(true);
-        homeC.listUpcoming.addAll(ListMovieModel.fromJson(result.body).results!);
-      }else{
+    
+    }
+    else if(title == 'Upcoming'){
+      await seeAllRepository.getSeeAllMovie('upcoming', page.toString()).then((result){
+        if(ListMovieModel.fromJson(result.body).results!.isNotEmpty){
+          isMoreDataAvailable(true);
+          listAllMovies.addAll(ListMovieModel.fromJson(result.body).results!);
+        }else{
+          isMoreDataAvailable(false);
+        }
+      }, onError: (err){
         isMoreDataAvailable(false);
-      }
-    },
-    onError: (err){
-      isMoreDataAvailable(false);
-    });
+      });
+    }
   }
+
   @override
   void onClose() {
     // TODO: implement onClose

@@ -8,7 +8,9 @@ class DetailPageController extends GetxController with StateMixin{
   final DetailPageRepository detailPageRepository;
   DetailPageController({required this.detailPageRepository});
 
-  final detailMovie = {}.obs;
+  final detailMovie = DetailMovieModel().obs; // cara 1
+
+  // final Rx<DetailMovieModel> detailMovie2; //cara 2
 
   @override
   void onInit() {
@@ -20,14 +22,8 @@ class DetailPageController extends GetxController with StateMixin{
     change(null, status: RxStatus.loading());
 
     await detailPageRepository.getDetailMovie(movieId.toString()).then((result){
-      detailMovie.value = DetailMovieModel.fromJson(result.body).toJson();
-
-      if(detailMovie.value.isEmpty){
-        change(null, status: RxStatus.empty());
-      }else{
-        change(null, status: RxStatus.success());
-      }
-
+      detailMovie.value = DetailMovieModel.fromJson(result.body);
+      change(null, status: RxStatus.success());
     }, onError: (err){
       change(null, status: RxStatus.error(err.toString()));
     });
@@ -39,10 +35,10 @@ class DetailPageController extends GetxController with StateMixin{
     return '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}';
   } 
 
-  List getGenresName(List<Map<String, dynamic>> listGenres){
+  List getGenresName(List<Genres> listGenres){
     List genresName = [];
     for (var element in listGenres) {
-      genresName.add(element["name"]);
+      genresName.add(element.name);
     }
     return genresName;
   }

@@ -2,18 +2,10 @@ import 'package:get/get.dart';
 
 class HttpService extends GetConnect{
   final BASE_URL = 'https://api.themoviedb.org/3/';
-  final API_KEY = '81728309a12b337c7334a06681733deb';
+  static const API_KEY = '81728309a12b337c7334a06681733deb';
 
-  Future<Response> getHttp(String endpoint, [String page = "1"]){
-    return get(BASE_URL+endpoint, query: {
-      "api_key" : API_KEY,
-      "page" : page
-    });
+  Future<Response> getHttp(String endpoint, Map<String, dynamic> query,){
+    return get(BASE_URL+endpoint, query: query);
   }
 
-  Future<Response> getDetail(String endpoint, String id){
-    return get(BASE_URL+endpoint+id, query: {
-      "api_key" : API_KEY
-    });
-  }
 }
