@@ -50,15 +50,15 @@ class SeeAllController extends GetxController{
 
   void getMoreNowPlaying(int page) async {
     await seeAllRepository.getNowPlaying(page.toString()).then((result){
-      if(ListMovieModel.fromJson(result.body).results!.isNotEmpty && ListMovieModel.fromJson(result.body).totalPages! <= page){
-        isMoreDataAvailable.value = true;
+      if(ListMovieModel.fromJson(result.body).results!.isNotEmpty){
+        isMoreDataAvailable(true);
         homeC.listNowPlaying.addAll(ListMovieModel.fromJson(result.body).results!);
       }else{
-        isMoreDataAvailable.value = false;
+        isMoreDataAvailable(false);
       }
     },
     onError: (err){
-      isMoreDataAvailable.value = false;
+      isMoreDataAvailable(false);
     });
   }
 

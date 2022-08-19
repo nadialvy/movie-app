@@ -20,7 +20,7 @@ class DetailPageView extends GetView<DetailPageController> {
             [
               VxBox(
                 child: Image(
-                  image: NetworkImage('http://image.tmdb.org/t/p/w500${controller.detailMovie["poster_path"]}'),
+                  image: NetworkImage(controller.detailMovie["poster_path"] != null ? 'http://image.tmdb.org/t/p/w500${controller.detailMovie["poster_path"]}' : 'https://dummyimage.com/300x300/000/fff&text=no+data'),
                   fit: BoxFit.cover,
                 )
               ).color(secondaryBlue).height(Get.height * 0.5).width(Get.width).make(),
